@@ -18,7 +18,6 @@ class Racket {
         this.width = 130;
         this.height = 15;
         this.speed = 0.25;
-        this.distance = 15;
 
         this.color = color;
 
@@ -67,15 +66,7 @@ class Ball {
     constructor() {
         this.radius = 7.5;
 
-        this.x = WIDTH / 2;
-        this.y = HEIGHT / 2;
-
-        this.speedX = 0;
-        this.speedY = 0;
-
-        this.startPosX = this.x;
-        this.startPosY = this.y;
-        this.startTime = Date.now();
+        this.reset();
     }
 
     reset() {
@@ -217,8 +208,8 @@ socket.addEventListener('message', function (event) {
 
     if (leave) {
         alert(leave);
-        redScore.innerHTML = 0;
-        blueScore.innerHTML = 0;
+        redScore.innerHTML = '0';
+        blueScore.innerHTML = '0';
         topRacket.reset();
         bottomRacket.reset();
         ball.reset();
@@ -249,11 +240,15 @@ socket.addEventListener('message', function (event) {
     }
 });
 
-socket.addEventListener('open', function (event) {
+socket.addEventListener('open', function () {
     connected = true;
 });
 
-button.addEventListener('click', function (event) {
+input.addEventListener('input', function () {
+    input.value = input.value.toUpperCase();
+})
+
+button.addEventListener('click', function () {
     if (connected) {
         socket.send(JSON.stringify({'code': input.value}));
     }

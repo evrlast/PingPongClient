@@ -11,77 +11,12 @@ body {
     text-align: center;
 }
 
-.game-field {
-    position: relative;
-    margin: 10px auto;
-    width: 600px;
-    height: 800px;
-    background-color: black;
-    border: 2px solid #FFF;
-}
-
 #canvas {
     display: block;
     position: relative;
     margin: 10px auto;
     background-color: black;
     border: 2px solid #FFF;
-}
-
-.racket {
-    transition-duration: 1s;
-    position: absolute;
-    width: 150px;
-    height: 20px;
-    left: 225px;
-    border-radius: 5px;
-}
-
-.racket.first {
-    background-color: #f00;
-    top: 10px;
-}
-
-.racket.second {
-    background-color: #00f;
-    bottom: 10px;
-}
-
-.ball {
-    transition-duration: 1s;
-    position: absolute;
-    width: 0;
-    height: 0;
-    top: 0;
-    left: 0;
-    transform: translate(300px, 400px);
-}
-
-.ball-bg {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 20px;
-    background-color: white;
-    top: -10px;
-    left: -10px;
-}
-
-.start-field {
-    width: 600px;
-    height: 800px;
-    background-color: gray;
-}
-
-.start {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    font-size: 25px;
-    width: 100px;
-    height: 50px;
-    top: 375px;
-    left: 250px;
 }
 
 .score {
@@ -106,6 +41,6 @@ body {
 }
 
 #input {
-    text-transform:uppercase
+    /*text-transform:uppercase*/
 }
 
