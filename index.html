@@ -10,16 +10,33 @@
     <div class="header">
         <div class="title">Ping Pong</div>
     </div>
+
+    <h2 id="opponent">Your opponent is </h2>
+
     <canvas id="canvas" width="500" height="650"></canvas>
 
-    <div class="room">
-        <h2 id="yourCode">Your code: -----</h2>
-        <div class="input-fields">
+    <div id="authorization">
+        <div class="room">
+            <div id="welcome">
+                <h2>WELCOME!</h2>
+                <h4>Please, enter your nickname</h4>
+            </div>
+
+            <div id="code">
+                <h2>Enter opponent code</h2>
+                <h3 id="yourCode">Your code: -----</h3>
+            </div>
+
+
+
             <input type="text" id="nickname" placeholder="Your nickname">
             <input type="text" id="input" placeholder="Opponent code">
+
+            <button id="button">Submit</button>
         </div>
-        <button id="button">Submit</button>
     </div>
+
+
 </body>
 <script type="application/javascript" src="./scripts/index.js"></script>
 </html>

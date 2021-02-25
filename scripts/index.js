@@ -2,6 +2,10 @@ yourCode = document.getElementById('yourCode')
 button = document.getElementById('button')
 input = document.getElementById('input')
 nickname = document.getElementById('nickname')
+welcome = document.getElementById('welcome')
+codeTest = document.getElementById('code')
+authorization = document.getElementById('authorization')
+opponent = document.getElementById('opponent')
 
 myScore = 0;
 opponentScore = 0;
@@ -11,6 +15,12 @@ const socket = new WebSocket('ws://192.168.0.93:9595')
 canvas = document.getElementById('canvas');
 ctx = canvas.getContext('2d');
 connected = false;
+nicknameShow = true;
+codeShow = false;
+yourName = '';
+opponentName = '';
+
+ready = false;
 
 const WIDTH = 500;
 const HEIGHT = 650;
@@ -194,31 +204,54 @@ function draw() {
 raf = window.requestAnimationFrame(draw);
 
 addEventListener('keydown', function (event) {
-    if (event.code === 'ArrowLeft' && bottomRacket.dx !== -1 && bottomRacket.x > 0) {
-        bottomRacket.dx = -1;
-        bottomRacket.startPos = bottomRacket.x;
-        bottomRacket.startTime = Date.now();
+    if (ready) {
+        if (event.code === 'ArrowLeft' && bottomRacket.dx !== -1 && bottomRacket.x > 0) {
+            bottomRacket.dx = -1;
+            bottomRacket.startPos = bottomRacket.x;
+            bottomRacket.startTime = Date.now();
 
-        socket.send(JSON.stringify({dx: bottomRacket.dx}));
+            socket.send(JSON.stringify({dx: bottomRacket.dx}));
+        }
+
+        if (event.code === 'ArrowRight' && bottomRacket.dx !== 1 && bottomRacket.x + bottomRacket.width < WIDTH) {
+            bottomRacket.dx = 1;
+            bottomRacket.startPos = bottomRacket.x;
+            bottomRacket.startTime = Date.now();
+
+            socket.send(JSON.stringify({dx: bottomRacket.dx}));
+        }
     }
 
-    if (event.code === 'ArrowRight' && bottomRacket.dx !== 1 && bottomRacket.x + bottomRacket.width < WIDTH) {
-        bottomRacket.dx = 1;
-        bottomRacket.startPos = bottomRacket.x;
-        bottomRacket.startTime = Date.now();
-
-        socket.send(JSON.stringify({dx: bottomRacket.dx}));
-    }
 });
 
 socket.addEventListener('message', function (event) {
     const data = JSON.parse(event.data);
-    const {dx, score, speedX, speedY, code, leave} = data;
+    const {dx, score, speedX, speedY, code, leave, codeError, enemyName} = data;
+
+    if (enemyName) {
+        authorization.style.display = 'none';
+        opponentName = enemyName;
+
+        opponent.innerText += ' ' + opponentName;
+
+        ready = true;
+    }
 
     if (leave) {
         alert(leave);
         myScore = 0;
         opponentScore = 0;
+
+        opponent.innerText = 'Your opponent is ';
+
+        ready = false;
+
+        authorization.style.display = 'block';
+        input.style.display = 'block';
+        codeTest.style.display = 'block';
+        yourCode.style.display = 'block'
+        codeShow = true;
+
         topRacket.reset();
         bottomRacket.reset();
         ball.reset();
@@ -227,6 +260,10 @@ socket.addEventListener('message', function (event) {
     if (code) {
         console.log(code)
         yourCode.innerHTML = 'Your code: ' + code;
+    }
+
+    if (codeError) {
+        input.classList.add('input-error');
     }
 
     if (speedX && speedY) {
@@ -245,7 +282,7 @@ socket.addEventListener('message', function (event) {
         topRacket.startPos = topRacket.x;
     }
     if (score) {
-         myScore = score
+        myScore = score
     }
 });
 
@@ -258,16 +295,37 @@ input.addEventListener('input', function () {
 })
 
 nickname.addEventListener('input', function () {
-    if (nickname.classList.contains('input-error'))     nickname.classList.remove('input-error')
+    if (nickname.classList.contains('input-error')) nickname.classList.remove('input-error')
+})
+
+input.addEventListener('input', function () {
+    if (input.classList.contains('input-error')) input.classList.remove('input-error')
 })
 
 button.addEventListener('click', function () {
     if (connected) {
-        if (nickname.value === '') {
-            nickname.classList.add('input-error')
-        }
-        else{
-            socket.send(JSON.stringify({'code': input.value, 'name': nickname.value}));
+        if (nicknameShow) {
+            if (nickname.value === '') nickname.classList.add('input-error');
+            else {
+                socket.send(JSON.stringify({'name': nickname.value}));
+                yourName = nickname.value;
+
+                nickname.style.display = 'none';
+                welcome.style.display = 'none';
+                nicknameShow = false;
+
+                input.style.display = 'block';
+                codeTest.style.display = 'block';
+                yourCode.style.display = 'block'
+                codeShow = true;
+            }
+        } else {
+            if (codeShow) {
+                if (input.value === '') input.classList.add('input-error');
+                else {
+                    socket.send(JSON.stringify({'code': input.value}));
+                }
+            }
         }
 
     }

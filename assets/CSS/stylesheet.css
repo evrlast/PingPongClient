@@ -11,6 +11,11 @@ body {
     text-align: center;
 }
 
+#opponent {
+    display: block;
+    text-align: center;
+}
+
 .input-error {
     background-color: #fce4e4;
     border: 2px solid #cc0033;
@@ -26,28 +31,68 @@ body {
     border: 2px solid #FFF;
 }
 
-.score {
-    font-size: 50px;
-    font-weight: bold;
-    text-align: center;
-    margin: 10px 0;
-}
+/*.score {*/
+/*    font-size: 50px;*/
+/*    font-weight: bold;*/
+/*    text-align: center;*/
+/*    margin: 10px 0;*/
+/*}*/
 
-.blue-score {
-    color: #f00;
-}
+/*.blue-score {*/
+/*    color: #f00;*/
+/*}*/
 
-.red-score {
-    color: #00f;
+/*.red-score {*/
+/*    color: #00f;*/
+/*}*/
+
+#authorization {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+
+    background-color: rgba(0, 0, 0, 0.4);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .room {
     display: block;
-    text-align: center;
-    margin-bottom: 20px;
+    background-color: #FFF;
+    padding: 20px 40px;
+    border-radius: 10px;
+    border: 2px solid #333;
+    margin-top: -50px;
 }
 
-#nickname, #input {
+#welcome {
+    display: block;
+    text-align: center;
+}
+
+#welcome h2 {
+    margin: 5px;
+}
+
+#welcome h4 {
+    margin-top: 10px;
+}
+
+#code {
+    display: none;
+    text-align: center;
+}
+
+#yourCode {
+    display: none;
+}
+
+#nickname {
     font-size: 16px;
     display: block;
     margin: 5px auto;
@@ -55,9 +100,19 @@ body {
     border-radius: 5px;
 }
 
-#button {
+#input {
     font-size: 16px;
-    margin-top: 10px;
+    display: none;
+    margin: 5px auto;
+    padding: 3px 3px;
+    border-radius: 5px;
+}
+
+#button {
+    display: block;
+
+    font-size: 25px;
+    margin: 10px auto 0 auto;
 }
 
 #button:hover {
