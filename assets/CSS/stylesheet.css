@@ -83,6 +83,13 @@ body {
     margin-top: 10px;
 }
 
+#opponentLeave{
+    color: #cc0033;
+    font-size: 15px;
+    display: none;
+    text-align: center;
+}
+
 #code {
     display: none;
     text-align: center;

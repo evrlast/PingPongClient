@@ -6,6 +6,7 @@ welcome = document.getElementById('welcome')
 codeTest = document.getElementById('code')
 authorization = document.getElementById('authorization')
 opponent = document.getElementById('opponent')
+opponentLeave = document.getElementById('opponentLeave')
 
 myScore = 0;
 opponentScore = 0;
@@ -137,22 +138,18 @@ class Ball {
             }
         }
         if (this.y - this.radius < 30) {
-            if (this.x >= topRacket.x && this.x <= topRacket.x + topRacket.width) {
-                this.speedY = -this.speedY;
+            this.speedY = -this.speedY;
 
-                if (Math.abs(this.speedX) < 0.3 && Math.abs(this.speedY) < 0.3) {
-                    this.speedY += 0.01;
-                    this.speedX += topRacket.dx / 100;
-                }
-
-                this.y = 30 + this.radius;
-
-                this.startPosX = this.x;
-                this.startPosY = this.y;
-                this.startTime = Date.now();
-            } else {
-                this.reset();
+            if (Math.abs(this.speedX) < 0.3 && Math.abs(this.speedY) < 0.3) {
+                this.speedY += 0.01;
+                this.speedX += topRacket.dx / 100;
             }
+
+            this.y = 30 + this.radius;
+
+            this.startPosX = this.x;
+            this.startPosY = this.y;
+            this.startTime = Date.now();
         }
     }
 
@@ -204,6 +201,9 @@ function draw() {
 raf = window.requestAnimationFrame(draw);
 
 addEventListener('keydown', function (event) {
+    if (event.code === 'Enter') {
+        submit();
+    }
     if (ready) {
         if (event.code === 'ArrowLeft' && bottomRacket.dx !== -1 && bottomRacket.x > 0) {
             bottomRacket.dx = -1;
@@ -225,6 +225,7 @@ addEventListener('keydown', function (event) {
 });
 
 socket.addEventListener('message', function (event) {
+    console.log(Date.now())
     const data = JSON.parse(event.data);
     const {dx, score, speedX, speedY, code, leave, codeError, enemyName} = data;
 
@@ -238,7 +239,6 @@ socket.addEventListener('message', function (event) {
     }
 
     if (leave) {
-        alert(leave);
         myScore = 0;
         opponentScore = 0;
 
@@ -246,10 +246,12 @@ socket.addEventListener('message', function (event) {
 
         ready = false;
 
-        authorization.style.display = 'block';
+
+        authorization.style.display = 'flex';
         input.style.display = 'block';
         codeTest.style.display = 'block';
         yourCode.style.display = 'block'
+        opponentLeave.style.display = 'block';
         codeShow = true;
 
         topRacket.reset();
@@ -258,7 +260,6 @@ socket.addEventListener('message', function (event) {
     }
 
     if (code) {
-        console.log(code)
         yourCode.innerHTML = 'Your code: ' + code;
     }
 
@@ -303,6 +304,10 @@ input.addEventListener('input', function () {
 })
 
 button.addEventListener('click', function () {
+    submit();
+});
+
+function submit() {
     if (connected) {
         if (nicknameShow) {
             if (nickname.value === '') nickname.classList.add('input-error');
@@ -329,4 +334,4 @@ button.addEventListener('click', function () {
         }
 
     }
-});
+}
