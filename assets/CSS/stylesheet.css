@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background-color: #03B6B4;
 }
 
@@ -11,10 +11,17 @@ body {
     text-align: center;
 }
 
+.input-error {
+    background-color: #fce4e4;
+    border: 2px solid #cc0033;
+    outline: none;
+}
+
+
 #canvas {
     display: block;
     position: relative;
-    margin: 10px auto;
+    margin: 20px auto;
     background-color: black;
     border: 2px solid #FFF;
 }
@@ -40,7 +47,19 @@ body {
     margin-bottom: 20px;
 }
 
-#input {
-    /*text-transform:uppercase*/
+#nickname, #input {
+    font-size: 16px;
+    display: block;
+    margin: 5px auto;
+    padding: 3px 3px;
+    border-radius: 5px;
 }
 
+#button {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#button:hover {
+    cursor: pointer;
+}

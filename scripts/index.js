@@ -1,8 +1,10 @@
-blueScore = document.getElementById('blueScore')
-redScore = document.getElementById('redScore')
 yourCode = document.getElementById('yourCode')
 button = document.getElementById('button')
 input = document.getElementById('input')
+nickname = document.getElementById('nickname')
+
+myScore = 0;
+opponentScore = 0;
 
 const socket = new WebSocket('ws://192.168.0.93:9595')
 
@@ -119,7 +121,7 @@ class Ball {
             } else {
                 socket.send(JSON.stringify({goal: '1'}));
 
-                blueScore.innerHTML++;
+                opponentScore++;
 
                 this.reset();
             }
@@ -165,6 +167,8 @@ ball = new Ball();
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.font = "50px serif";
+
     ctx.beginPath();
 
     ctx.strokeStyle = '#FFF';
@@ -178,6 +182,11 @@ function draw() {
     topRacket.draw();
     ball.draw();
     bottomRacket.draw();
+
+    ctx.fillText(myScore, WIDTH - 60, HEIGHT / 4 * 3 + 20);
+
+    ctx.fillStyle = '#F00';
+    ctx.fillText(opponentScore, WIDTH - 60, HEIGHT / 4 + 20);
 
     raf = window.requestAnimationFrame(draw);
 }
@@ -208,8 +217,8 @@ socket.addEventListener('message', function (event) {
 
     if (leave) {
         alert(leave);
-        redScore.innerHTML = '0';
-        blueScore.innerHTML = '0';
+        myScore = 0;
+        opponentScore = 0;
         topRacket.reset();
         bottomRacket.reset();
         ball.reset();
@@ -236,7 +245,7 @@ socket.addEventListener('message', function (event) {
         topRacket.startPos = topRacket.x;
     }
     if (score) {
-        redScore.innerHTML = score;
+         myScore = score
     }
 });
 
@@ -248,8 +257,18 @@ input.addEventListener('input', function () {
     input.value = input.value.toUpperCase();
 })
 
+nickname.addEventListener('input', function () {
+    if (nickname.classList.contains('input-error'))     nickname.classList.remove('input-error')
+})
+
 button.addEventListener('click', function () {
     if (connected) {
-        socket.send(JSON.stringify({'code': input.value}));
+        if (nickname.value === '') {
+            nickname.classList.add('input-error')
+        }
+        else{
+            socket.send(JSON.stringify({'code': input.value, 'name': nickname.value}));
+        }
+
     }
 });

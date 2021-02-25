@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <title>Ping Pong</title>
     <link rel="stylesheet" href="./assets/CSS/stylesheet.css">
+    <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png">
 </head>
 <body>
     <div class="header">
         <div class="title">Ping Pong</div>
     </div>
-    <div class="score"><span class="blue-score" id="blueScore">0</span>:<span class="red-score" id="redScore">0</span></div>
     <canvas id="canvas" width="500" height="650"></canvas>
 
     <div class="room">
         <h2 id="yourCode">Your code: -----</h2>
-        <input type="text" id="input" placeholder="Opponent code">
-        <button id="button">Enter</button>
+        <div class="input-fields">
+            <input type="text" id="nickname" placeholder="Your nickname">
+            <input type="text" id="input" placeholder="Opponent code">
+        </div>
+        <button id="button">Submit</button>
     </div>
 </body>
 <script type="application/javascript" src="./scripts/index.js"></script>
