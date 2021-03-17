@@ -1,12 +1,18 @@
 yourCode = document.getElementById('yourCode')
-button = document.getElementById('button')
+submitButton = document.getElementById('submit-button')
 input = document.getElementById('input')
 nickname = document.getElementById('nickname')
 welcome = document.getElementById('welcome')
-codeTest = document.getElementById('code')
-authorization = document.getElementById('authorization')
+codeText = document.getElementById('code')
+popup = document.getElementById('popup')
 opponent = document.getElementById('opponent')
 opponentLeave = document.getElementById('opponentLeave')
+backButton = document.getElementById('another')
+playButton = document.getElementById('play-again')
+resultWindow = document.getElementById('result')
+resultText = document.getElementById('result-text')
+room = document.getElementById('room')
+waiting = document.getElementById('waiting')
 
 myScore = 0;
 opponentScore = 0;
@@ -138,18 +144,20 @@ class Ball {
             }
         }
         if (this.y - this.radius < 30) {
-            this.speedY = -this.speedY;
+            if (this.x >= topRacket.x - 10 && this.x <= topRacket.x + topRacket.width + 10){
+                this.speedY = -this.speedY;
 
-            if (Math.abs(this.speedX) < 0.3 && Math.abs(this.speedY) < 0.3) {
-                this.speedY += 0.01;
-                this.speedX += topRacket.dx / 100;
+                if (Math.abs(this.speedX) < 0.3 && Math.abs(this.speedY) < 0.3) {
+                    this.speedY += 0.01;
+                    this.speedX += topRacket.dx / 100;
+                }
+
+                this.y = 30 + this.radius;
+
+                this.startPosX = this.x;
+                this.startPosY = this.y;
+                this.startTime = Date.now();
             }
-
-            this.y = 30 + this.radius;
-
-            this.startPosX = this.x;
-            this.startPosY = this.y;
-            this.startTime = Date.now();
         }
     }
 
@@ -170,6 +178,13 @@ class Ball {
 topRacket = new Racket(185, 15, "#F00");
 bottomRacket = new Racket(185, HEIGHT - 30, "#00F");
 ball = new Ball();
+
+function showResult(result) {
+    resultText.innerText = result;
+    popup.style.display = 'flex';
+    resultWindow.style.display = 'block';
+    waiting.style.display = 'none';
+}
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -225,15 +240,22 @@ addEventListener('keydown', function (event) {
 });
 
 socket.addEventListener('message', function (event) {
-    console.log(Date.now())
     const data = JSON.parse(event.data);
-    const {dx, score, speedX, speedY, code, leave, codeError, enemyName} = data;
+    const {dx, score, speedX, speedY, code, leave, codeError, enemyName, result} = data;
+
+    if (result) {
+        myScore = 0
+        opponentScore = 0
+        ball.reset();
+        showResult(result);
+    }
 
     if (enemyName) {
-        authorization.style.display = 'none';
+        room.style.display = 'none';
+        popup.style.display = 'none';
         opponentName = enemyName;
 
-        opponent.innerText += ' ' + opponentName;
+        opponent.innerText = "Your opponent is " + opponentName;
 
         ready = true;
     }
@@ -246,12 +268,13 @@ socket.addEventListener('message', function (event) {
 
         ready = false;
 
-
-        authorization.style.display = 'flex';
+        popup.style.display = 'flex';
+        room.style.display = 'block';
         input.style.display = 'block';
-        codeTest.style.display = 'block';
+        codeText.style.display = 'block';
         yourCode.style.display = 'block'
         opponentLeave.style.display = 'block';
+        resultWindow.style.display = 'none';
         codeShow = true;
 
         topRacket.reset();
@@ -303,9 +326,25 @@ input.addEventListener('input', function () {
     if (input.classList.contains('input-error')) input.classList.remove('input-error')
 })
 
-button.addEventListener('click', function () {
+submitButton.addEventListener('click', function () {
     submit();
 });
+
+backButton.addEventListener('click', function () {
+    socket.send(JSON.stringify({'exit': 1}));
+    popup.style.display = 'flex';
+    resultWindow.style.display = 'none';
+    room.style.display = 'block'
+    ready = false;
+    myScore = 0;
+    opponentScore = 0;
+    opponentName = '';
+})
+
+playButton.addEventListener('click', function () {
+    socket.send(JSON.stringify({'playAgain': 1}));
+    waiting.style.display = 'block';
+})
 
 function submit() {
     if (connected) {
@@ -320,7 +359,7 @@ function submit() {
                 nicknameShow = false;
 
                 input.style.display = 'block';
-                codeTest.style.display = 'block';
+                codeText.style.display = 'block';
                 yourCode.style.display = 'block'
                 codeShow = true;
             }
@@ -332,6 +371,5 @@ function submit() {
                 }
             }
         }
-
     }
 }

@@ -31,22 +31,7 @@ body {
     border: 2px solid #FFF;
 }
 
-/*.score {*/
-/*    font-size: 50px;*/
-/*    font-weight: bold;*/
-/*    text-align: center;*/
-/*    margin: 10px 0;*/
-/*}*/
-
-/*.blue-score {*/
-/*    color: #f00;*/
-/*}*/
-
-/*.red-score {*/
-/*    color: #00f;*/
-/*}*/
-
-#authorization {
+#popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -61,7 +46,7 @@ body {
     justify-content: center;
 }
 
-.room {
+#room {
     display: block;
     background-color: #FFF;
     padding: 20px 40px;
@@ -115,13 +100,37 @@ body {
     border-radius: 5px;
 }
 
-#button {
+button {
     display: block;
-
-    font-size: 25px;
+    font-size: 22px;
     margin: 10px auto 0 auto;
 }
 
-#button:hover {
+button:hover {
     cursor: pointer;
+}
+
+#result {
+    display: none;
+    background-color: #FFF;
+    padding: 20px 40px;
+    border-radius: 10px;
+    border: 2px solid #333;
+    margin-top: -50px;
+}
+
+#result h2 {
+    text-align: center;
+    margin: 5px;
+    font-size: 2em;
+}
+
+#play-again, #another {
+    font-size: 17px;
+}
+
+#waiting {
+    margin: 7px;
+    text-align: center;
+    display: none;
 }

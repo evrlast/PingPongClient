@@ -15,8 +15,8 @@
 
     <canvas id="canvas" width="500" height="650"></canvas>
 
-    <div id="authorization">
-        <div class="room">
+    <div id="popup">
+        <div id="room">
             <div id="welcome">
                 <h2>WELCOME!</h2>
                 <h4>Please, enter your nickname</h4>
@@ -28,12 +28,16 @@
                 <h3 id="yourCode">Your code: -----</h3>
             </div>
 
-
-
             <input type="text" id="nickname" placeholder="Your nickname">
             <input type="text" id="input" placeholder="Opponent code">
 
-            <button id="button">Submit</button>
+            <button id="submit-button">Submit</button>
+        </div>
+        <div id="result">
+            <h2 id="result-text">You win!</h2>
+            <h4 id="waiting">Waiting for opponent</h4>
+            <button id="play-again">Play again</button>
+            <button id="another">Back to menu</button>
         </div>
     </div>
 
